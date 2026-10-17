@@ -1,0 +1,509 @@
+\documentclass[14pt, a4paper, landscape]{extarticle}
+
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+
+\geometry{margin=1cm}
+
+\usepackage{xepersian}
+\settextfont{Vazirmatn}
+\setlatintextfont{Times New Roman}
+\setdigitfont{Vazirmatn}
+
+\definecolor{primary}{RGB}{139, 90, 43}
+\definecolor{accent}{RGB}{224, 122, 63}
+\definecolor{bg}{RGB}{245, 240, 232}
+\definecolor{darkbg}{RGB}{92, 58, 26}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\textcolor{primary}{مهندسی نرم‌افزار — جلسهٔ ۴}}
+\fancyfoot[C]{\textcolor{primary}{\thepage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\setlength{\headheight}{15pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\newcommand{\slide}[1]{%
+    \newpage
+    \begin{center}
+    \begin{minipage}[t]{0.95\textwidth}
+    \vspace{0.5cm}
+    #1
+    \vspace{0.5cm}
+    \end{minipage}
+    \end{center}
+}
+
+\newcommand{\slidetitle}[1]{%
+    \begin{center}
+        {\LARGE\bfseries\textcolor{primary}{#1}}
+    \end{center}
+    \vspace{0.5cm}
+}
+
+\newcommand{\myaccent}[1]{\textcolor{accent}{#1}}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+    \fill[darkbg] (current page.north west) rectangle (current page.south 
+east);
+\end{tikzpicture}
+
+\begin{center}
+    \vspace*{4cm}
+    {\color{white}\Huge\bfseries مهندسی نرم‌افزار}
+    
+    \vspace{1cm}
+    
+    {\color{accent}\LARGE جلسهٔ ۴ — مدل‌سازی و معماری}
+    
+    \vspace{2cm}
+    
+    {\color{white}\Large ابراهیم فضلی}
+    
+    \vspace{0.5cm}
+    
+    {\color{white}\large ترم ۱۴۰۴}
+\end{center}
+
+\pagestyle{fancy}
+
+\slide{
+    \slidetitle{مرور جلسهٔ ۳}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item فرآیند = نقشهٔ راه تیم
+        \item Waterfall، Agile، Scrum
+        \item نقش‌ها، رویدادها، آرتیفکت‌ها
+        \item Daily Standup
+        \item Kanban و XP
+        \item تسک: ۱۰ User Story + Backlog
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{چرا مدل‌سازی مهم است؟}
+    \vspace{1cm}
+    \begin{center}
+        {\Large\bfseries\myaccent{مدل = ساده‌سازی واقعیت}}
+        
+        \vspace{1.5cm}
+        
+        {\large قبل از کدنویسی، سیستم را طراحی می‌کنیم.}
+        
+        \vspace{0.5cm}
+        
+        {\large مدل خوب = کد بهتر، تغییرات آسان‌تر.}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{UML چیست؟}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries Unified Modeling Language}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item زبان استاندارد مدل‌سازی نرم‌افزار
+        \item ۱۴ نوع دیاگرام
+        \item مهم‌ترین‌ها:
+        \begin{itemize}
+            \item Use Case Diagram
+            \item Class Diagram
+            \item Sequence Diagram
+            \item Activity Diagram
+        \end{itemize}
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Use Case Diagram}
+    \vspace{0.5cm}
+    {\large چه کسی با سیستم چه کاری می‌کند؟}
+    \vspace{1cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{Actor:} کاربر یا سیستم خارجی
+        \item \textbf{Use Case:} یک عملکرد
+        \item \textbf{Relationship:} ارتباط
+    \end{itemize}
+    \vspace{1cm}
+    \begin{center}
+        {\myaccent{مثال: مشتری → مشاهدهٔ محصولات}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Class Diagram}
+    \vspace{0.5cm}
+    {\large ساختار کلاس‌ها و روابط}
+    \vspace{1cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{Class:} نام، ویژگی‌ها، متدها
+        \item \textbf{Association:} ارتباط ساده
+        \item \textbf{Inheritance:} ارث‌بری
+        \item \textbf{Composition:} ترکیب
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{مثال: Product، Order، Customer}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Sequence Diagram}
+    \vspace{0.5cm}
+    {\large ترتیب تعاملات در زمان}
+    \vspace{1cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{Actor:} کاربر
+        \item \textbf{Object:} شیء
+        \item \textbf{Message:} پیام
+        \item \textbf{Lifeline:} خط زمان
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{مثال: مشتری → سبد خرید → ثبت سفارش}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Activity Diagram}
+    \vspace{0.5cm}
+    {\large جریان کار و تصمیم‌ها}
+    \vspace{1cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{Start / End:} شروع و پایان
+        \item \textbf{Action:} فعالیت
+        \item \textbf{Decision:} تصمیم
+        \item \textbf{Fork / Join:} انشعاب
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{مثال: فرآیند خرید}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{نمونه: UML در HomeStore}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{دیاگرام} & \textbf{کاربرد} \\
+            \midrule
+            Use Case & خرید، مدیریت، انبار \\
+            \hline
+            Class & Product، Order، Customer \\
+            \hline
+            Sequence & ثبت سفارش \\
+            \hline
+            Activity & فرآیند پرداخت \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{ابزارهای UML}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item \textbf{draw.io} — رایگان، آنلاین
+        \item \textbf{Lucidchart} — حرفه‌ای، رایگان محدود
+        \item \textbf{PlantUML} — متنی، برای کدنویسی
+        \item \textbf{StarUML} — حرفه‌ای، دسکتاپ
+        \item \textbf{Figma} — طراحی، نه UML خالص
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{توصیه: draw.io یا PlantUML}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{معماری نرم‌افزار}
+    \vspace{0.5cm}
+    {\large ساختار کلی سیستم}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{معماری:} تصمیم‌های سطح بالا
+        \item \textbf{طراحی:} جزئیات پیاده‌سازی
+        \item معماری خوب = تغییرات آسان‌تر
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\myaccent{معماری = نقشهٔ ساختمان، طراحی = نقشهٔ اتاق‌ها}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{معماری لایه‌ای}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries Layers Architecture}
+    \end{center}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{لایه} & \textbf{مسئولیت} \\
+            \midrule
+            Presentation & UI، تعامل با کاربر \\
+            \hline
+            Business & منطق کسب‌وکار \\
+            \hline
+            Data & دسترسی به دیتابیس \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{مزیت: جدایی مسئولیت‌ها}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{MVC — Model View Controller}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries الگوی طراحی UI}
+    \end{center}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{Model:} داده و منطق
+        \item \textbf{View:} نمایش
+        \item \textbf{Controller:} واسط بین Model و View
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{محبوب در فریم‌ورک‌های وب}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Monolith vs Microservice}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tabular}{lp{3.5cm}p{3.5cm}}
+            \toprule
+            & \textbf{Monolith} & \textbf{Microservice} \\
+            \midrule
+            ساختار & یک برنامه & چند سرویس \\
+            \hline
+            استقرار & یکجا & جداگانه \\
+            \hline
+            مقیاس & کلی & تکی \\
+            \hline
+            پیچیدگی & کم & زیاد \\
+            \hline
+            مناسب & تیم کوچک & تیم بزرگ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{REST API}
+    \vspace{0.5cm}
+    {\large واسط بین Frontend و Backend}
+    \vspace{0.8cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{Method} & \textbf{کاربرد} \\
+            \midrule
+            GET & خواندن \\
+            \hline
+            POST & ایجاد \\
+            \hline
+            PUT & به‌روزرسانی \\
+            \hline
+            DELETE & حذف \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{مثال: /api/products}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{نمونه: معماری HomeStore}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{لایه} & \textbf{فناوری} \\
+            \midrule
+            Presentation & React \\
+            \hline
+            Business & Node.js + Express \\
+            \hline
+            Data & PostgreSQL \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.3em]
+        \item Frontend: SPA
+        \item Backend: REST API
+        \item Database: Relational
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Trade-offهای معماری}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item \textbf{سادگی vs انعطاف}
+        \item \textbf{سرعت vs مقیاس‌پذیری}
+        \item \textbf{امنیت vs سرعت توسعه}
+        \item \textbf{هزینه vs کیفیت}
+    \end{itemize}
+    \vspace{1cm}
+    \begin{center}
+        {\large\myaccent{هیچ معماری‌ای کامل نیست}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{انتخاب معماری}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item \textbf{تیم کوچک، پروژهٔ ساده:} Monolith
+        \item \textbf{تیم بزرگ، پروژهٔ پیچیده:} Microservice
+        \item \textbf{پروژهٔ محتوایی:} Jamstack
+        \item \textbf{پروژهٔ Real-time:} Event-driven
+    \end{itemize}
+    \vspace{1cm}
+    \begin{center}
+        {\myaccent{برای HomeStore: Monolith + Layered}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{مدل داده}
+    \vspace{0.5cm}
+    {\large ساختار داده‌ها و روابط}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{Entity:} موجودیت (مثل Product)
+        \item \textbf{Attribute:} ویژگی (مثل price)
+        \item \textbf{Relationship:} رابطه (مثل Product-Order)
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{ERD — Entity Relationship Diagram}
+    \vspace{0.5cm}
+    {\large نمودار موجودیت‌ها و روابط}
+    \vspace{0.8cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{موجودیت} & \textbf{ویژگی‌های کلیدی} \\
+            \midrule
+            Product & id, name, price, stock \\
+            \hline
+            Category & id, name \\
+            \hline
+            Order & id, customer\_id, total \\
+            \hline
+            Customer & id, name, phone \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{نرمال‌سازی}
+    \vspace{0.5cm}
+    {\large کاهش تکرار داده‌ها}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item \textbf{1NF:} حذف گروه‌های تکراری
+        \item \textbf{2NF:} حذف وابستگی جزئی
+        \item \textbf{3NF:} حذف وابستگی انتقالی
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{معمولاً تا 3NF کافی است}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{نمونه: دیتابیس HomeStore}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{جدول} & \textbf{نقش} \\
+            \midrule
+            products & محصولات \\
+            \hline
+            categories & دسته‌بندی‌ها \\
+            \hline
+            orders & سفارش‌ها \\
+            \hline
+            order\_items & اقلام سفارش \\
+            \hline
+            customers & مشتریان \\
+            \hline
+            users & کاربران (ادمین) \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{تسک هفتهٔ آینده}
+    \vspace{0.5cm}
+    \begin{minipage}[t]{0.48\textwidth}
+        {\bfseries\textcolor{primary}{تسک شما:}}
+        \vspace{0.3cm}
+        \begin{itemize}[itemsep=0.3em]
+            \item Use Case Diagram برای پروژه
+            \item Class Diagram اولیه
+            \item انتخاب معماری
+            \item ERD دیتابیس
+            \item مستندسازی تصمیم‌ها
+        \end{itemize}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        {\bfseries\myaccent{تسک من:}}
+        \vspace{0.3cm}
+        \begin{itemize}[itemsep=0.3em]
+            \item architecture.md در HomeStore
+            \item database-schema.md
+            \item Use Case Diagram
+            \item Class Diagram
+            \item آماده‌سازی Sprint 1
+        \end{itemize}
+    \end{minipage}
+}
+
+\slide{
+    \begin{center}
+        \vspace{3cm}
+        {\Huge\bfseries سؤالی دارید؟}
+        \vspace{1.5cm}
+        {\LARGE\myaccent{به امید یک ترم پربار}}
+    \end{center}
+}
+
+\end{document}
