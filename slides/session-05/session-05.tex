@@ -1,0 +1,440 @@
+\documentclass[14pt, a4paper, landscape]{extarticle}
+
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+
+\geometry{margin=1cm}
+
+\usepackage{xepersian}
+\settextfont{Vazirmatn}
+\setlatintextfont{Times New Roman}
+\setdigitfont{Vazirmatn}
+
+\definecolor{primary}{RGB}{139, 90, 43}
+\definecolor{accent}{RGB}{224, 122, 63}
+\definecolor{bg}{RGB}{245, 240, 232}
+\definecolor{darkbg}{RGB}{92, 58, 26}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\textcolor{primary}{مهندسی نرم‌افزار — جلسهٔ ۵}}
+\fancyfoot[C]{\textcolor{primary}{\thepage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\setlength{\headheight}{15pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\newcommand{\slide}[1]{%
+    \newpage
+    \begin{center}
+    \begin{minipage}[t]{0.95\textwidth}
+    \vspace{0.5cm}
+    #1
+    \vspace{0.5cm}
+    \end{minipage}
+    \end{center}
+}
+
+\newcommand{\slidetitle}[1]{%
+    \begin{center}
+        {\LARGE\bfseries\textcolor{primary}{#1}}
+    \end{center}
+    \vspace{0.5cm}
+}
+
+\newcommand{\myaccent}[1]{\textcolor{accent}{#1}}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+    \fill[darkbg] (current page.north west) rectangle (current page.south 
+east);
+\end{tikzpicture}
+
+\begin{center}
+    \vspace*{4cm}
+    {\color{white}\Huge\bfseries مهندسی نرم‌افزار}
+    
+    \vspace{1cm}
+    
+    {\color{accent}\LARGE جلسهٔ ۵ — Sprint 1 Review}
+    
+    \vspace{2cm}
+    
+    {\color{white}\Large ابراهیم فضلی}
+    
+    \vspace{0.5cm}
+    
+    {\color{white}\large ترم ۱۴۰۴}
+\end{center}
+
+\pagestyle{fancy}
+
+\slide{
+    \slidetitle{مرور Sprint 1}
+    \vspace{0.5cm}
+    {\large در Sprint 1 چه چیزی باید تحویل می‌دادیم؟}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item Vision و Personas
+        \item ۱۰ User Story
+        \item Product Backlog در GitHub Projects
+        \item معماری اولیه
+        \item شروع پیاده‌سازی
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{امروز می‌بینیم چقدر موفق بودیم.}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Sprint Review چیست؟}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries یک جلسهٔ رسمی در پایان هر Sprint}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item {\large تیم محصول را به مشتری نشان می‌دهد}
+        \item {\large مشتری بازخورد می‌دهد}
+        \item {\large دربارهٔ Sprint بعدی صحبت می‌شود}
+        \item {\large جلسهٔ \textbf{نمایش}، نه گزارش}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{هدف: دریافت بازخورد واقعی، نه نمره}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{چرا Sprint Review مهم است؟}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.7em]
+        \item {\large مطمئن می‌شویم در مسیر درست هستیم}
+        \item {\large مشتری زودتر بازخورد می‌دهد}
+        \item {\large مشکلات زودتر کشف می‌شوند}
+        \item {\large تیم انگیزه می‌گیرد}
+        \item {\large شفافیت ایجاد می‌شود}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\large\myaccent{بدون بازخورد، ممکن است ماه‌ها اشتباه برویم.}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Sprint Review در Scrum}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{lp{9cm}}
+            \toprule
+            \textbf{ویژگی} & \textbf{توضیح} \\
+            \midrule
+            مدت & ۱-۲ ساعت \\
+            \hline
+            شرکت‌کنندگان & تیم + مشتری + ذی‌نفعان \\
+            \hline
+            خروجی & بازخورد + Backlog به‌روز \\
+            \hline
+            frecuencia & پایان هر Sprint \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{در این درس: ۲۰ دقیقه برای هر تیم}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{اهداف Sprint Review}
+    \vspace{0.5cm}
+    \begin{enumerate}[itemsep=0.6em]
+        \item {\large \textbf{نمایش} آنچه ساخته شده}
+        \item {\large \textbf{دریافت} بازخورد از مشتری}
+        \item {\large \textbf{بررسی} اینکه آیا Sprint Goal محقق شد}
+        \item {\large \textbf{به‌روزرسانی} Product Backlog}
+        \item {\large \textbf{تصمیم} دربارهٔ Sprint بعدی}
+    \end{enumerate}
+}
+
+\slide{
+    \slidetitle{شرکت‌کنندگان}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.7em]
+        \item {\large\textbf{تیم توسعه}} — ارائه‌دهنده
+        \item {\large\textbf{Product Owner}} — مدیریت Backlog
+        \item {\large\textbf{Scrum Master}} — هماهنگی جلسه
+        \item {\large\textbf{مشتری}} — بازخورد
+        \item {\large\textbf{ذی‌نفعان}} — نظارت
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{در این درس: استاد = مشتری + ذی‌نفع}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{دستور جلسه}
+    \vspace{0.5cm}
+    \begin{enumerate}[itemsep=0.5em]
+        \item {\large هر تیم ۱۰ دقیقه ارائه می‌دهد}
+        \item {\large ۵ دقیقه پرسش و پاسخ}
+        \item {\large ۵ دقیقه بازخورد استاد}
+        \item {\large ثبت بازخورد در فرم}
+    \end{enumerate}
+    \vspace{0.8cm}
+    \begin{center}
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{بخش} & \textbf{زمان} \\
+            \midrule
+            Demo & ۵ دقیقه \\
+            \hline
+            توضیح فنی & ۳ دقیقه \\
+            \hline
+            چالش‌ها & ۲ دقیقه \\
+            \hline
+            پرسش و پاسخ & ۵ دقیقه \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Demo — چه چیزی نشان دهیم؟}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item {\large محصول \textbf{کارکننده} — نه اسلاید}
+        \item {\large سناریوی واقعی: مشتری چه کاری می‌کند؟}
+        \item {\large مسیر اصلی (Happy Path)}
+        \item {\large یک قابلیت کلیدی}
+        \item {\large محدودیت‌ها را صادقانه بگویید}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\large\myaccent{اگر چیزی کار نمی‌کند، نشان ندهید — ولی بگویید 
+چرا.}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{معیارهای ارزیابی Sprint 1}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{p{5cm}p{3cm}p{4cm}}
+            \toprule
+            \textbf{معیار} & \textbf{وزن} & \textbf{توضیح} \\
+            \midrule
+            تحویل Storyها & ۴۰٪ & چند تا از ۱۰ تا کامل شد \\
+            \hline
+            کیفیت کد & ۲۰٪ & تست، Review، خوانایی \\
+            \hline
+            مستندات & ۲۰٪ & Vision، Personas، User Stories \\
+            \hline
+            ارائه & ۲۰٪ & Demo، وضوح، اعتماد \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Definition of Done — مرور}
+    \vspace{0.5cm}
+    {\large یک Story وقتی «تمام» است که:}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item کد نوشته و Merge شده
+        \item تست دارد و پاس می‌شود
+        \item Code Review شده
+        \item مستندات به‌روز است
+        \item در محیط Demo کار می‌کند
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{اگر یکی از این‌ها نبود، Story «تمام» نیست.}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{فرم بازخورد}
+    \vspace{0.5cm}
+    {\large برای هر تیم، این موارد را ثبت می‌کنیم:}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{lp{9cm}}
+            \toprule
+            \textbf{بخش} & \textbf{سؤال} \\
+            \midrule
+            نقاط قوت & چه چیزی خوب بود؟ \\
+            \hline
+            نقاط ضعف & چه چیزی می‌شد بهتر باشد؟ \\
+            \hline
+            پیشنهاد & چه کاری در Sprint 2 انجام دهیم؟ \\
+            \hline
+            نمره & از ۱ تا ۵ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Retrospective چیست؟}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries جلسهٔ داخلی تیم برای بهبود فرآیند}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item {\large بعد از Sprint Review}
+        \item {\large فقط اعضای تیم}
+        \item {\large صادقانه و بدون سرزنش}
+        \item {\large خروجی: اقدام‌های قابل اجرا}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{هدف: بهبود فرآیند، نه ارزیابی افراد}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Start / Stop / Continue}
+    \vspace{0.5cm}
+    {\large سه سؤال ساده برای Retrospective:}
+    \vspace{0.8cm}
+    \begin{center}
+        \begin{tabular}{lp{8cm}}
+            \toprule
+            \textbf{سؤال} & \textbf{مثال} \\
+            \midrule
+            \textbf{Start} & چه کاری را شروع کنیم؟ \\
+            \hline
+            \textbf{Stop} & چه کاری را متوقف کنیم؟ \\
+            \hline
+            \textbf{Continue} & چه کاری را ادامه دهیم؟ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{center}
+        {\large\myaccent{ساده، سریع، مؤثر}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{نمونهٔ Retrospective}
+    \vspace{0.5cm}
+    {\large یک تیم بعد از Sprint 1:}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item {\large\textbf{Start:} جلسهٔ Daily منظم}
+        \item {\large\textbf{Stop:} کد زدن بدون تست}
+        \item {\large\textbf{Continue:} Code Review}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{اقدام‌ها باید \textbf{قابل اندازه‌گیری} باشند.}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{درس‌های آموخته‌شده}
+    \vspace{0.5cm}
+    {\large در Sprint 1 چه چیزی یاد گرفتیم؟}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item {\large نیازمندی‌ها را دقیق‌تر بنویسیم}
+        \item {\large تست را جدی بگیریم}
+        \item {\large ارتباط تیمی بهتر شود}
+        \item {\large زمان‌بندی واقع‌بینانه باشد}
+        \item {\large از AI درست استفاده کنیم}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\large\myaccent{هر Sprint = یک فرصت یادگیری}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{برنامهٔ Sprint 2}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{lp{9cm}}
+            \toprule
+            \textbf{بخش} & \textbf{توضیح} \\
+            \midrule
+            Sprint Goal & ثبت سفارش + مقایسه + پنل ادمین \\
+            \hline
+            مدت & هفته‌های ۶-۱۱ (۶ هفته) \\
+            \hline
+            خروجی & MVP کامل‌تر \\
+            \hline
+            Demo & در جلسهٔ ۱۱ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{امروز Sprint 2 را برنامه‌ریزی می‌کنیم.}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{تسک هفتهٔ آینده}
+    \vspace{0.5cm}
+    \begin{minipage}[t]{0.48\textwidth}
+        {\bfseries\textcolor{primary}{تسک شما:}}
+        \vspace{0.3cm}
+        \begin{itemize}[itemsep=0.3em]
+            \item Sprint 2 Planning
+            \item انتخاب Storyهای Sprint 2
+            \item Sprint 2 Goal مشخص
+            \item Retrospective مکتوب
+            \item شروع پیاده‌سازی
+        \end{itemize}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        {\bfseries\myaccent{تسک من:}}
+        \vspace{0.3cm}
+        \begin{itemize}[itemsep=0.3em]
+            \item Sprint Report نمونه
+            \item قالب Retrospective
+            \item بازخورد هر تیم
+            \item آماده‌سازی جلسهٔ ۶
+        \end{itemize}
+    \end{minipage}
+}
+
+\slide{
+    \slidetitle{سه برداشت کلیدی}
+    \vspace{1cm}
+    \begin{enumerate}[itemsep=0.8em]
+        \item {\large Sprint Review = نمایش، نه گزارش}
+        \item {\large Retrospective = بهبود فرآیند، نه ارزیابی افراد}
+        \item {\large بازخورد = بهترین دوست تیم}
+    \end{enumerate}
+}
+
+\slide{
+    \begin{center}
+        \vspace{3cm}
+        {\Huge\bfseries سؤالی دارید؟}
+        \vspace{1.5cm}
+        {\LARGE\myaccent{به امید یک Sprint 2 پربار}}
+    \end{center}
+}
+
+\end{document}
