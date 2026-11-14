@@ -1,0 +1,553 @@
+\documentclass[14pt, a4paper, landscape]{extarticle}
+
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+
+\geometry{margin=1cm}
+
+\usepackage{xepersian}
+\settextfont{Vazirmatn}
+\setlatintextfont{Times New Roman}
+\setdigitfont{Vazirmatn}
+
+\definecolor{primary}{RGB}{139, 90, 43}
+\definecolor{accent}{RGB}{224, 122, 63}
+\definecolor{bg}{RGB}{245, 240, 232}
+\definecolor{darkbg}{RGB}{92, 58, 26}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\textcolor{primary}{مهندسی نرم‌افزار — جلسهٔ ۷}}
+\fancyfoot[C]{\textcolor{primary}{\thepage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\setlength{\headheight}{15pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\newcommand{\slide}[1]{%
+    \newpage
+    \begin{center}
+    \begin{minipage}[t]{0.95\textwidth}
+    \vspace{0.5cm}
+    #1
+    \vspace{0.5cm}
+    \end{minipage}
+    \end{center}
+}
+
+\newcommand{\slidetitle}[1]{%
+    \begin{center}
+        {\LARGE\bfseries\textcolor{primary}{#1}}
+    \end{center}
+    \vspace{0.5cm}
+}
+
+\newcommand{\myaccent}[1]{\textcolor{accent}{#1}}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+    \fill[darkbg] (current page.north west) rectangle (current page.south 
+east);
+\end{tikzpicture}
+
+\begin{center}
+    \vspace*{4cm}
+    {\color{white}\Huge\bfseries مهندسی نرم‌افزار}
+    
+    \vspace{1cm}
+    
+    {\color{accent}\LARGE جلسهٔ ۷ — الگوهای طراحی}
+    
+    \vspace{2cm}
+    
+    {\color{white}\Large ابراهیم فضلی}
+    
+    \vspace{0.5cm}
+    
+    {\color{white}\large ترم ۱۴۰۴}
+\end{center}
+
+\pagestyle{fancy}
+
+\slide{
+    \slidetitle{مرور جلسهٔ ۶}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item چهار اصل OOP: Encapsulation, Inheritance, Polymorphism, 
+Abstraction
+        \item SOLID: پنج اصل طراحی
+        \item SRP در HomeStore
+        \item Coupling و Cohesion
+        \item مقدمه Design Patterns
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        {\myaccent{امروز: الگوهای طراحی عمیق‌تر}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Design Pattern چیست؟}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries راه‌حل‌های آماده برای مشکلات رایج طراحی}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item {\large الگو = قالب، نه کد آماده}
+        \item {\large بارها آزمایش شده}
+        \item {\large زبان مشترک بین توسعه‌دهنده‌ها}
+        \item {\large مستقل از زبان برنامه‌نویسی}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{Design Pattern = تجربهٔ جمعی صنعت نرم‌افزار}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{چرا Design Pattern مهم است؟}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.6em]
+        \item {\large کد \textbf{قابل فهم‌تر} می‌شود}
+        \item {\large ارتباط تیمی \textbf{ساده‌تر} می‌شود}
+        \item {\large \textbf{تست} آسان‌تر می‌شود}
+        \item {\large \textbf{تغییرات} کم‌هزینه‌تر می‌شوند}
+        \item {\large از \textbf{اشتباهات رایج} جلوگیری می‌کند}
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{center}
+        {\large\myaccent{مثال: به‌جای «این کلاس رو چطور بنویسم؟» می‌گوییم 
+«اینجا Strategy مناسبه».}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{سه دسته Design Pattern}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{lp{9cm}}
+            \toprule
+            \textbf{دسته} & \textbf{هدف} \\
+            \midrule
+            Creational & ساخت اشیاء \\
+            \hline
+            Structural & ترکیب اشیاء \\
+            \hline
+            Behavioral & تعامل اشیاء \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{center}
+        {\myaccent{۲۳ الگوی کلاسیک در GoF (Gang of Four)}}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{Creational Patterns — مقدمه}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries الگوهای ساخت اشیاء}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item {\large \textbf{Factory Method} — ساخت اشیاء با interface 
+مشترک}
+        \item {\large \textbf{Abstract Factory} — ساخت خانواده‌ای از اشیاء}
+        \item {\large \textbf{Singleton} — فقط یک نمونه}
+        \item {\large \textbf{Builder} — ساخت گام‌به‌گام}
+        \item {\large \textbf{Prototype} — کپی از نمونه}
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Factory Method}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries ساخت اشیاء بدون دانستن کلاس دقیق}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مسئله:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item کلاینت نمی‌داند کدام کلاس را بسازد
+        \item تصمیم ساخت باید در یک جا باشد
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{راه‌حل:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item یک interface مشترک
+        \item یک Factory که شیء مناسب را می‌سازد
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Factory — مثال HomeStore}
+    \vspace{0.3cm}
+    {\large\textbf{مسئله:} روش‌های پرداخت مختلف}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tabular}{lp{8cm}}
+            \toprule
+            \textbf{کلاس} & \textbf{نقش} \\
+            \midrule
+            \lr{PaymentMethod} & interface مشترک \\
+            \hline
+            \lr{CardPayment} & پرداخت با کارت \\
+            \hline
+            \lr{PayPalPayment} & پرداخت با PayPal \\
+            \hline
+            \lr{PaymentFactory} & ساخت روش مناسب \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} افزودن روش جدید = فقط کلاس جدید}
+}
+
+\slide{
+    \slidetitle{Abstract Factory}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries ساخت خانواده‌ای از اشیاء مرتبط}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مثال:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item \lr{IUIFactory} — ساخت دکمه، فرم، جدول
+        \item \lr{LightThemeFactory} — نسخهٔ روشن
+        \item \lr{DarkThemeFactory} — نسخهٔ تیره
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{تفاوت با Factory Method:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item Factory Method: یک شیء
+        \item Abstract Factory: خانواده‌ای از اشیاء
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Singleton}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries فقط یک نمونه از کلاس}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{کاربرد:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item اتصال به دیتابیس
+        \item تنظیمات برنامه
+        \item لاگ کردن
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{هشدار:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item تست سخت می‌شود
+        \item Coupling بالا
+        \item استفاده با احتیاط
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Builder}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries ساخت گام‌به‌گام اشیاء پیچیده}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مثال:} ساخت سفارش}
+    \vspace{0.5cm}
+    \begin{itemize}[itemsep=0.3em]
+        \item \lr{OrderBuilder.addItem()}
+        \item \lr{OrderBuilder.setAddress()}
+        \item \lr{OrderBuilder.setPayment()}
+        \item \lr{OrderBuilder.build()}
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} کد خواناتر از constructor با ۱۰ پارامتر}
+}
+
+\slide{
+    \slidetitle{Structural Patterns — مقدمه}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries الگوهای ترکیب اشیاء}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item {\large \textbf{Adapter} — تبدیل interface}
+        \item {\large \textbf{Decorator} — افزودن رفتار}
+        \item {\large \textbf{Facade} — ساده‌سازی}
+        \item {\large \textbf{Proxy} — کنترل دسترسی}
+        \item {\large \textbf{Composite} — ساختار درختی}
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Adapter}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries تبدیل interface ناسازگار}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مثال:} درگاه پرداخت خارجی}
+    \begin{itemize}[itemsep=0.3em]
+        \item کد ما: \lr{PaymentGateway.pay()}
+        \item درگاه: \lr{StripeAPI.charge()}
+        \item Adapter: \lr{StripeAdapter implements PaymentGateway}
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} کد ما از جزئیات درگاه مستقل می‌شود}
+}
+
+\slide{
+    \slidetitle{Decorator}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries افزودن رفتار بدون تغییر کلاس}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مثال:} لاگ کردن}
+    \begin{itemize}[itemsep=0.3em]
+        \item \lr{OrderService} — اصلی
+        \item \lr{LoggedOrderService} — با لاگ
+        \item \lr{CachedOrderService} — با کش
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} ترکیب رفتارها بدون تغییر کد اصلی}
+}
+
+\slide{
+    \slidetitle{Facade}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries ساده‌سازی interface پیچیده}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مثال:} فرآیند خرید}
+    \begin{itemize}[itemsep=0.3em]
+        \item \lr{OrderService}, \lr{PaymentService}, \lr{EmailService}, 
+\lr{StockService}
+        \item Facade: \lr{PurchaseFacade.buy()}
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} کلاینت فقط یک متد صدا می‌زند}
+}
+
+\slide{
+    \slidetitle{Behavioral Patterns — مقدمه}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries الگوهای تعامل اشیاء}
+    \end{center}
+    \vspace{0.8cm}
+    \begin{itemize}[itemsep=0.5em]
+        \item {\large \textbf{Strategy} — الگوریتم قابل تعویض}
+        \item {\large \textbf{Observer} — اطلاع‌رسانی}
+        \item {\large \textbf{Command} — کپسوله‌سازی درخواست}
+        \item {\large \textbf{State} — تغییر رفتار با حالت}
+        \item {\large \textbf{Template Method} — قالب الگوریتم}
+    \end{itemize}
+}
+
+\slide{
+    \slidetitle{Strategy}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries الگوریتم قابل تعویض}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مسئله:} محاسبهٔ هزینهٔ ارسال}
+    \begin{itemize}[itemsep=0.3em]
+        \item پست: بر اساس وزن
+        \item تیپاکس: بر اساس شهر
+        \item پیک: بر اساس فاصله
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{راه‌حل:} interface \lr{ShippingStrategy} + سه 
+implementation}
+}
+
+\slide{
+    \slidetitle{Strategy — مثال HomeStore}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tabular}{lp{8cm}}
+            \toprule
+            \textbf{کلاس} & \textbf{نقش} \\
+            \midrule
+            \lr{ShippingStrategy} & interface \\
+            \hline
+            \lr{PostShipping} & محاسبهٔ پست \\
+            \hline
+            \lr{TipaxShipping} & محاسبهٔ تیپاکس \\
+            \hline
+            \lr{ExpressShipping} & محاسبهٔ پیک \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} افزودن روش جدید = فقط کلاس جدید}
+}
+
+\slide{
+    \slidetitle{Observer}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries اطلاع‌رسانی تغییرات}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مسئله:} وقتی سفارش ثبت می‌شود، چه کسی باید خبردار شود؟}
+    \begin{itemize}[itemsep=0.3em]
+        \item ایمیل به مشتری
+        \item SMS به انبار
+        \item اطلاع به پنل ادمین
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{راه‌حل:} Observer pattern}
+}
+
+\slide{
+    \slidetitle{Observer — مثال HomeStore}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tabular}{lp{8cm}}
+            \toprule
+            \textbf{کلاس} & \textbf{نقش} \\
+            \midrule
+            \lr{Order} & Subject (منبع) \\
+            \hline
+            \lr{OrderObserver} & interface \\
+            \hline
+            \lr{EmailNotifier} & اطلاع با ایمیل \\
+            \hline
+            \lr{SmsNotifier} & اطلاع با SMS \\
+            \hline
+            \lr{StockNotifier} & اطلاع به انبار \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} افزودن notifier جدید = فقط کلاس جدید}
+}
+
+\slide{
+    \slidetitle{Repository Pattern}
+    \vspace{0.5cm}
+    \begin{center}
+        {\large\bfseries جداسازی منطق دیتابیس}
+    \end{center}
+    \vspace{0.8cm}
+    {\large\textbf{مسئله:} کد کسب‌وکار نباید بداند دیتابیس چیست}
+    \vspace{0.5cm}
+    {\large\textbf{راه‌حل:}}
+    \begin{itemize}[itemsep=0.3em]
+        \item \lr{IOrderRepository} — interface
+        \item \lr{PostgresOrderRepository} — پیاده‌سازی
+        \item \lr{InMemoryOrderRepository} — برای تست
+    \end{itemize}
+    \vspace{0.5cm}
+    {\large\textbf{مزیت:} تغییر دیتابیس = فقط تغییر implementation}
+}
+
+\slide{
+    \slidetitle{مقایسه الگوها}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tabular}{llp{6cm}}
+            \toprule
+            \textbf{الگو} & \textbf{دسته} & \textbf{کاربرد} \\
+            \midrule
+            Factory & Creational & ساخت اشیاء \\
+            \hline
+            Singleton & Creational & یک نمونه \\
+            \hline
+            Adapter & Structural & تبدیل interface \\
+            \hline
+            Decorator & Structural & افزودن رفتار \\
+            \hline
+            Strategy & Behavioral & الگوریتم قابل تعویض \\
+            \hline
+            Observer & Behavioral & اطلاع‌رسانی \\
+            \hline
+            Repository & Architectural & جداسازی دیتابیس \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+}
+
+\slide{
+    \slidetitle{تمرین: انتخاب الگو}
+    \vspace{0.5cm}
+    {\large برای هر سناریو، الگوی مناسب را انتخاب کنید:}
+    \vspace{0.5cm}
+    \begin{enumerate}[itemsep=0.4em]
+        \item {\large محاسبهٔ مالیات برای کشورهای مختلف}
+        \item {\large ارسال ایمیل و SMS هنگام ثبت سفارش}
+        \item {\large اتصال به درگاه‌های پرداخت مختلف}
+        \item {\large کش کردن نتایج جست‌وجو}
+        \item {\large ساخت گزارش با گزینه‌های زیاد}
+    \end{enumerate}
+    \vspace{0.5cm}
+    {\large\textbf{پاسخ‌ها:} Strategy، Observer، Adapter، Decorator، 
+Builder}
+}
+
+\slide{
+    \slidetitle{تسک هفتهٔ آینده}
+    \vspace{0.5cm}
+    \begin{minipage}[t]{0.48\textwidth}
+        {\bfseries\textcolor{primary}{تسک شما:}}
+        \vspace{0.3cm}
+        \begin{itemize}[itemsep=0.3em]
+            \item یک Design Pattern در پروژه استفاده کنید
+            \item دلیل انتخاب را مستند کنید
+            \item کد قبل و بعد را نشان دهید
+            \item تست بنویسید
+        \end{itemize}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        {\bfseries\myaccent{تسک من:}}
+        \vspace{0.3cm}
+        \begin{itemize}[itemsep=0.3em]
+            \item Refactor کد HomeStore با Strategy
+            \item مستند Design Patterns
+            \item جزوهٔ مطالعه
+            \item آماده‌سازی جلسهٔ ۸
+        \end{itemize}
+    \end{minipage}
+}
+
+\slide{
+    \slidetitle{سه برداشت کلیدی}
+    \vspace{1cm}
+    \begin{enumerate}[itemsep=0.8em]
+        \item {\large Design Pattern = راه‌حل آماده برای مشکل رایج}
+        \item {\large Creational، Structural، Behavioral}
+        \item {\large الگو را با نیاز انتخاب کن، نه از روی مد}
+    \end{enumerate}
+}
+
+\slide{
+    \begin{center}
+        \vspace{3cm}
+        {\Huge\bfseries سؤالی دارید؟}
+        \vspace{1.5cm}
+        {\LARGE\myaccent{به امید یک ترم پربار}}
+    \end{center}
+}
+
+\end{document}
