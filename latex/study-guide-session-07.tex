@@ -1,0 +1,802 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{listings}
+
+\geometry{margin=2.5cm}
+
+\usepackage{xepersian}
+\settextfont{Vazirmatn}
+\setlatintextfont{Times New Roman}
+\setdigitfont{Vazirmatn}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\titleformat{\section}{\Large\bfseries\color{blue!60!black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\setlist{nosep, leftmargin=*}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small جزوهٔ مطالعه — جلسهٔ ۷}
+\fancyhead[L]{\small الگوهای طراحی}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\linespread{1.4}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    language=Java,
+    showstringspaces=false
+}
+
+\title{
+    \vspace{-1cm}
+    \textbf{\Huge جزوهٔ مطالعه}\\[0.3cm]
+    \textbf{\LARGE جلسهٔ ۷: الگوهای طراحی}\\[0.5cm]
+    \large مهندسی نرم‌افزار
+}
+\author{
+    تهیه‌کننده: ابراهیم فضلی\\
+    ترم: ۱۴۰۴
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\vspace{1cm}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{درس} & مهندسی نرم‌افزار \\
+\hline
+\textbf{جلسه} & ۷ \\
+\hline
+\textbf{موضوع} & Design Patterns (Factory, Strategy, Observer, ...) \\
+\hline
+\textbf{زمان مطالعه} & ۳-۴ ساعت \\
+\hline
+\textbf{پیش‌نیاز} & جلسات ۱-۶ \\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{مقدمه}
+
+\subsection{چرا Design Pattern؟}
+
+در جلسهٔ ۶ یاد گرفتیم:
+\begin{itemize}
+    \item چهار اصل OOP
+    \item SOLID
+    \item Coupling و Cohesion
+\end{itemize}
+
+حالا سؤال: \textbf{چطور این اصول را در عمل پیاده کنیم؟}
+
+\textbf{پاسخ:} Design Patterns.
+
+\subsection{Design Pattern چیست؟}
+
+\begin{quote}
+\textbf{Design Pattern} یک راه‌حل آماده برای یک مشکل رایج طراحی است.
+\end{quote}
+
+\textbf{نکته مهم:} الگو = \textbf{قالب}، نه کد آماده.
+
+\subsection{مثال ساده}
+
+\textbf{مشکل:} ساخت روش‌های پرداخت مختلف (کارت، PayPal، کریپتو).
+
+\textbf{راه‌حل بدون الگو:}
+\begin{lstlisting}
+public void pay(String method, double amount) {
+    if (method.equals("card")) { ... }
+    else if (method.equals("paypal")) { ... }
+    else if (method.equals("crypto")) { ... }
+    // هر روش جدید = تغییر این متد
+}
+\end{lstlisting}
+
+\textbf{راه‌حل با Factory:}
+\begin{lstlisting}
+PaymentMethod method = PaymentFactory.create("card");
+method.pay(100000);
+// افزودن روش جدید = فقط کلاس جدید
+\end{lstlisting}
+
+\textbf{مزیت:} کد باز برای توسعه، بسته برای تغییر (OCP).
+
+\subsection{آنچه در این جزوه یاد می‌گیرید}
+\begin{itemize}
+    \item سه دسته Design Pattern
+    \item Creational: Factory, Singleton, Builder
+    \item Structural: Adapter, Decorator, Facade
+    \item Behavioral: Strategy, Observer
+    \item Repository Pattern
+    \item مثال‌های HomeStore
+\end{itemize}
+
+% ============================================================
+\section{سه دسته Design Pattern}
+
+\begin{center}
+\begin{tabular}{|l|p{9cm}|}
+\hline
+\textbf{دسته} & \textbf{هدف} \\
+\hline
+Creational & ساخت اشیاء \\
+\hline
+Structural & ترکیب اشیاء \\
+\hline
+Behavioral & تعامل اشیاء \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Creational Patterns}
+\begin{itemize}
+    \item \textbf{Factory Method} — ساخت اشیاء با interface مشترک
+    \item \textbf{Abstract Factory} — ساخت خانواده‌ای از اشیاء
+    \item \textbf{Singleton} — فقط یک نمونه
+    \item \textbf{Builder} — ساخت گام‌به‌گام
+    \item \textbf{Prototype} — کپی از نمونه
+\end{itemize}
+
+\subsection{Structural Patterns}
+\begin{itemize}
+    \item \textbf{Adapter} — تبدیل interface
+    \item \textbf{Decorator} — افزودن رفتار
+    \item \textbf{Facade} — ساده‌سازی
+    \item \textbf{Proxy} — کنترل دسترسی
+    \item \textbf{Composite} — ساختار درختی
+\end{itemize}
+
+\subsection{Behavioral Patterns}
+\begin{itemize}
+    \item \textbf{Strategy} — الگوریتم قابل تعویض
+    \item \textbf{Observer} — اطلاع‌رسانی
+    \item \textbf{Command} — کپسوله‌سازی درخواست
+    \item \textbf{State} — تغییر رفتار با حالت
+    \item \textbf{Template Method} — قالب الگوریتم
+\end{itemize}
+
+% ============================================================
+\section{Creational Patterns}
+
+\subsection{Factory Method}
+
+\subsubsection{مسئله}
+کلاینت نمی‌داند کدام کلاس را بسازد. تصمیم ساخت باید در یک جا باشد.
+
+\subsubsection{مثال HomeStore}
+\begin{lstlisting}
+public interface PaymentMethod {
+    void pay(double amount);
+}
+
+public class CardPayment implements PaymentMethod {
+    public void pay(double amount) { ... }
+}
+
+public class PayPalPayment implements PaymentMethod {
+    public void pay(double amount) { ... }
+}
+
+public class PaymentFactory {
+    public static PaymentMethod create(String type) {
+        if (type.equals("card")) return new CardPayment();
+        if (type.equals("paypal")) return new PayPalPayment();
+        throw new IllegalArgumentException();
+    }
+}
+
+// استفاده
+PaymentMethod payment = PaymentFactory.create("card");
+payment.pay(100000);
+\end{lstlisting}
+
+\subsubsection{مزیت}
+\begin{itemize}
+    \item افزودن روش جدید = فقط کلاس جدید
+    \item کلاینت از جزئیات مستقل است
+    \item تست آسان‌تر
+\end{itemize}
+
+\subsection{Abstract Factory}
+
+\subsubsection{تعریف}
+ساخت \textbf{خانواده‌ای} از اشیاء مرتبط.
+
+\subsubsection{مثال}
+\begin{lstlisting}
+public interface IUIFactory {
+    Button createButton();
+    Form createForm();
+    Table createTable();
+}
+
+public class LightThemeFactory implements IUIFactory {
+    public Button createButton() { return new LightButton(); }
+    // ...
+}
+
+public class DarkThemeFactory implements IUIFactory {
+    public Button createButton() { return new DarkButton(); }
+    // ...
+}
+\end{lstlisting}
+
+\subsubsection{تفاوت با Factory Method}
+\begin{itemize}
+    \item \textbf{Factory Method:} یک شیء
+    \item \textbf{Abstract Factory:} خانواده‌ای از اشیاء
+\end{itemize}
+
+\subsection{Singleton}
+
+\subsubsection{تعریف}
+فقط یک نمونه از کلاس.
+
+\subsubsection{مثال}
+\begin{lstlisting}
+public class DatabaseConnection {
+    private static DatabaseConnection instance;
+    
+    private DatabaseConnection() { ... }
+    
+    public static DatabaseConnection getInstance() {
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{کاربرد}
+\begin{itemize}
+    \item اتصال به دیتابیس
+    \item تنظیمات برنامه
+    \item لاگ کردن
+\end{itemize}
+
+\subsubsection{هشدار}
+\begin{itemize}
+    \item تست سخت می‌شود
+    \item Coupling بالا
+    \item استفاده با احتیاط
+\end{itemize}
+
+\subsection{Builder}
+
+\subsubsection{تعریف}
+ساخت گام‌به‌گام اشیاء پیچیده.
+
+\subsubsection{مثال}
+\begin{lstlisting}
+public class OrderBuilder {
+    private Order order = new Order();
+    
+    public OrderBuilder addItem(OrderItem item) {
+        order.addItem(item);
+        return this;
+    }
+    
+    public OrderBuilder setAddress(String address) {
+        order.setAddress(address);
+        return this;
+    }
+    
+    public OrderBuilder setPayment(PaymentMethod payment) {
+        order.setPayment(payment);
+        return this;
+    }
+    
+    public Order build() {
+        return order;
+    }
+}
+
+// استفاده
+Order order = new OrderBuilder()
+    .addItem(item1)
+    .addItem(item2)
+    .setAddress("Tehran")
+    .setPayment(new CardPayment())
+    .build();
+\end{lstlisting}
+
+\subsubsection{مزیت}
+کد خواناتر از constructor با ۱۰ پارامتر.
+
+% ============================================================
+\section{Structural Patterns}
+
+\subsection{Adapter}
+
+\subsubsection{تعریف}
+تبدیل interface ناسازگار به interface مورد انتظار.
+
+\subsubsection{مثال}
+\begin{lstlisting}
+// کد ما
+public interface PaymentGateway {
+    void pay(double amount);
+}
+
+// درگاه خارجی
+public class StripeAPI {
+    public void charge(double amount) { ... }
+}
+
+// Adapter
+public class StripeAdapter implements PaymentGateway {
+    private StripeAPI stripe;
+    
+    public StripeAdapter() {
+        this.stripe = new StripeAPI();
+    }
+    
+    public void pay(double amount) {
+        stripe.charge(amount);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{مزیت}
+کد ما از جزئیات درگاه مستقل می‌شود.
+
+\subsection{Decorator}
+
+\subsubsection{تعریف}
+افزودن رفتار بدون تغییر کلاس اصلی.
+
+\subsubsection{مثال}
+\begin{lstlisting}
+public interface OrderService {
+    void process(Order order);
+}
+
+public class OrderServiceImpl implements OrderService {
+    public void process(Order order) { ... }
+}
+
+public class LoggedOrderService implements OrderService {
+    private OrderService inner;
+    
+    public LoggedOrderService(OrderService inner) {
+        this.inner = inner;
+    }
+    
+    public void process(Order order) {
+        System.out.println("Processing: " + order);
+        inner.process(order);
+    }
+}
+
+// استفاده
+OrderService service = new LoggedOrderService(
+    new OrderServiceImpl()
+);
+\end{lstlisting}
+
+\subsubsection{مزیت}
+ترکیب رفتارها بدون تغییر کد اصلی.
+
+\subsection{Facade}
+
+\subsubsection{تعریف}
+ساده‌سازی interface پیچیده.
+
+\subsubsection{مثال}
+\begin{lstlisting}
+public class PurchaseFacade {
+    private OrderService orderService;
+    private PaymentService paymentService;
+    private EmailService emailService;
+    private StockService stockService;
+    
+    public void buy(Order order, PaymentMethod payment) {
+        orderService.create(order);
+        paymentService.charge(payment, order.getTotal());
+        stockService.reserve(order.getItems());
+        emailService.sendConfirmation(order);
+    }
+}
+
+// استفاده - فقط یک متد
+PurchaseFacade facade = new PurchaseFacade();
+facade.buy(order, payment);
+\end{lstlisting}
+
+\subsubsection{مزیت}
+کلاینت فقط یک متد صدا می‌زند.
+
+% ============================================================
+\section{Behavioral Patterns}
+
+\subsection{Strategy}
+
+\subsubsection{مسئله}
+محاسبهٔ هزینهٔ ارسال:
+\begin{itemize}
+    \item پست: بر اساس وزن
+    \item تیپاکس: بر اساس شهر
+    \item پیک: بر اساس فاصله
+\end{itemize}
+
+\subsubsection{راه‌حل}
+\begin{lstlisting}
+public interface ShippingStrategy {
+    double calculate(double weight);
+}
+
+public class PostShipping implements ShippingStrategy {
+    public double calculate(double weight) {
+        return weight * 5000;
+    }
+}
+
+public class ExpressShipping implements ShippingStrategy {
+    public double calculate(double weight) {
+        return weight * 15000;
+    }
+}
+
+// استفاده
+ShippingStrategy strategy = new ExpressShipping();
+double cost = strategy.calculate(2.5);
+\end{lstlisting}
+
+\subsubsection{مزیت}
+افزودن روش جدید = فقط کلاس جدید.
+
+\subsection{Observer}
+
+\subsubsection{مسئله}
+وقتی سفارش ثبت می‌شود، چه کسی باید خبردار شود؟
+\begin{itemize}
+    \item ایمیل به مشتری
+    \item SMS به انبار
+    \item اطلاع به پنل ادمین
+\end{itemize}
+
+\subsubsection{راه‌حل}
+\begin{lstlisting}
+public interface OrderObserver {
+    void onOrderCreated(Order order);
+}
+
+public class EmailNotifier implements OrderObserver {
+    public void onOrderCreated(Order order) {
+        // ارسال ایمیل
+    }
+}
+
+public class SmsNotifier implements OrderObserver {
+    public void onOrderCreated(Order order) {
+        // ارسال SMS
+    }
+}
+
+public class Order {
+    private List<OrderObserver> observers = new ArrayList<>();
+    
+    public void addObserver(OrderObserver observer) {
+        observers.add(observer);
+    }
+    
+    public void create() {
+        // ثبت سفارش
+        for (OrderObserver observer : observers) {
+            observer.onOrderCreated(this);
+        }
+    }
+}
+\end{lstlisting}
+
+\subsubsection{مزیت}
+افزودن notifier جدید = فقط کلاس جدید.
+
+% ============================================================
+\section{Repository Pattern}
+
+\subsection{تعریف}
+جداسازی منطق دیتابیس از منطق کسب‌وکار.
+
+\subsection{مثال}
+\begin{lstlisting}
+public interface IOrderRepository {
+    Order findById(int id);
+    void save(Order order);
+    List<Order> findByCustomer(int customerId);
+}
+
+public class PostgresOrderRepository implements IOrderRepository {
+    public Order findById(int id) { ... }
+    public void save(Order order) { ... }
+    public List<Order> findByCustomer(int customerId) { ... }
+}
+
+public class InMemoryOrderRepository implements IOrderRepository {
+    private Map<Integer, Order> orders = new HashMap<>();
+    
+    public Order findById(int id) { return orders.get(id); }
+    public void save(Order order) { orders.put(order.getId(), order); }
+    public List<Order> findByCustomer(int customerId) { ... }
+}
+\end{lstlisting}
+
+\subsection{مزیت}
+\begin{itemize}
+    \item تغییر دیتابیس = فقط تغییر implementation
+    \item تست آسان با InMemory
+    \item منطق کسب‌وکار از دیتابیس مستقل
+\end{itemize}
+
+% ============================================================
+\section{سؤالات کلیدی برای مطالعه}
+
+\subsection{سطح ۱ (پایه)}
+
+\subsubsection{سؤال ۱: Design Pattern چیست؟}
+\textbf{پاسخ:} راه‌حل آماده برای مشکلات رایج طراحی. الگو = قالب، نه کد 
+آماده.
+
+\subsubsection{سؤال ۲: سه دسته Design Pattern چیست؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item \textbf{Creational:} ساخت اشیاء
+    \item \textbf{Structural:} ترکیب اشیاء
+    \item \textbf{Behavioral:} تعامل اشیاء
+\end{itemize}
+
+\subsubsection{سؤال ۳: Factory Method چیست؟}
+\textbf{پاسخ:} یک interface مشترک + یک Factory که شیء مناسب را می‌سازد. 
+کلاینت نمی‌داند کدام کلاس ساخته می‌شود.
+
+\subsubsection{سؤال ۴: Strategy چیست؟}
+\textbf{پاسخ:} الگوریتم قابل تعویض. یک interface + چند implementation. 
+مثال: محاسبهٔ هزینهٔ ارسال با روش‌های مختلف.
+
+\subsubsection{سؤال ۵: Observer چیست؟}
+\textbf{پاسخ:} اطلاع‌رسانی تغییرات. یک Subject + چند Observer. مثال: وقتی 
+سفارش ثبت می‌شود، ایمیل و SMS فرستاده می‌شود.
+
+\subsection{سطح ۲ (متوسط)}
+
+\subsubsection{سؤال ۶: تفاوت Factory Method و Abstract Factory چیست؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item \textbf{Factory Method:} یک شیء
+    \item \textbf{Abstract Factory:} خانواده‌ای از اشیاء مرتبط
+\end{itemize}
+
+\subsubsection{سؤال ۷: چرا Singleton خطرناک است؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item تست سخت می‌شود (state مشترک)
+    \item Coupling بالا
+    \item چند رشته‌ای سخت
+    \item جایگزین: Dependency Injection
+\end{itemize}
+
+\subsubsection{سؤال ۸: تفاوت Adapter و Decorator چیست؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item \textbf{Adapter:} تبدیل interface (تغییر ظاهر)
+    \item \textbf{Decorator:} افزودن رفتار (تغییر عملکرد)
+\end{itemize}
+
+\subsubsection{سؤال ۹: Repository Pattern چه مزیتی دارد؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item جداسازی منطق دیتابیس از کسب‌وکار
+    \item تست آسان با InMemory
+    \item تغییر دیتابیس بدون تغییر کسب‌وکار
+\end{itemize}
+
+\subsubsection{سؤال ۱۰: چطور Design Pattern مناسب را انتخاب کنیم؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item مشکل را دقیق بشناس
+    \item ببین کدام الگو با مشکل همخوانی دارد
+    \item الگو را با نیاز انتخاب کن، نه از روی مد
+    \item ساده‌ترین راه‌حل را انتخاب کن
+\end{itemize}
+
+\subsection{سطح ۳ (پیشرفته)}
+
+\subsubsection{سؤال ۱۱: آیا همیشه باید Design Pattern استفاده کنیم؟}
+\textbf{پاسخ:} نه. برای پروژه‌های کوچک، ممکن است پیچیدگی اضافه کند. Design 
+Pattern برای پروژه‌هایی است که \textbf{طول عمر} دارند و \textbf{تغییر} 
+می‌کنند.
+
+\subsubsection{سؤال ۱۲: چطور Design Pattern را در تیم معرفی کنیم؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item آموزش
+    \item مثال‌های خوب در کد
+    \item Code Review با چک‌لیست
+    \item مستندسازی تصمیم‌ها
+\end{itemize}
+
+\subsubsection{سؤال ۱۳: تفاوت Strategy و State چیست؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item \textbf{Strategy:} الگوریتم قابل تعویض، انتخاب توسط کلاینت
+    \item \textbf{State:} تغییر رفتار با حالت، انتخاب خودکار
+\end{itemize}
+
+\subsubsection{سؤال ۱۴: چطور Design Pattern را تست کنیم؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item Unit Test برای هر implementation
+    \item Mock برای interface
+    \item Integration Test برای ترکیب
+\end{itemize}
+
+\subsubsection{سؤال ۱۵: اگر کد قدیمی Design Pattern را نقض می‌کند، چه کار 
+کنیم؟}
+\textbf{پاسخ:}
+\begin{itemize}
+    \item Refactor تدریجی (نه یک‌جا)
+    \item اولویت‌بندی بر اساس تغییرات آینده
+    \item تست قبل از Refactor
+    \item هر Sprint یک الگو
+\end{itemize}
+
+% ============================================================
+\section{تمرین‌ها}
+
+\subsection{تمرین ۱: انتخاب الگو}
+برای هر سناریو، الگوی مناسب را انتخاب کنید:
+\begin{enumerate}
+    \item محاسبهٔ مالیات برای کشورهای مختلف → Strategy
+    \item ارسال ایمیل و SMS هنگام ثبت سفارش → Observer
+    \item اتصال به درگاه‌های پرداخت مختلف → Adapter
+    \item کش کردن نتایج جست‌وجو → Decorator
+    \item ساخت گزارش با گزینه‌های زیاد → Builder
+\end{enumerate}
+
+\subsection{تمرین ۲: پیاده‌سازی Factory}
+یک \lr{NotificationFactory} بنویسید که ۳ نوع اطلاع‌رسانی (ایمیل، SMS، Push) 
+را پشتیبانی کند.
+
+\subsection{تمرین ۳: پیاده‌سازی Strategy}
+یک \lr{TaxStrategy} بنویسید که مالیات را برای ۳ کشور (ایران، ترکیه، آلمان) 
+محاسبه کند.
+
+\subsection{تمرین ۴: پیاده‌سازی Observer}
+یک \lr{StockObserver} بنویسید که وقتی موجودی محصول کم می‌شود، به ادمین 
+اطلاع دهد.
+
+\subsection{تمرین ۵: Repository}
+یک \lr{ProductRepository} بنویسید که هم PostgreSQL و هم InMemory را 
+پشتیبانی کند.
+
+% ============================================================
+\section{منابع}
+
+\subsection{منابع اصلی}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{منبع} & \textbf{فصل} \\
+\hline
+Design Patterns — GoF & کل کتاب \\
+\hline
+Head First Design Patterns & فصل ۱-۵ \\
+\hline
+Clean Architecture & فصل ۱۱-۱۴ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{منابع آنلاین}
+\begin{itemize}
+    \item \textbf{ویدیو:} Design Patterns in 1 hour
+    \item \textbf{وب‌سایت:} Refactoring.Guru
+    \item \textbf{کتاب رایگان:} Design Patterns (GoF)
+\end{itemize}
+
+% ============================================================
+\section{چک‌لیست مطالعه}
+
+\subsection{قبل از مطالعه}
+\begin{itemize}
+    \item[$\square$] جزوه را دانلود کردم
+    \item[$\square$] وقت کافی دارم (۳-۴ ساعت)
+\end{itemize}
+
+\subsection{در حین مطالعه}
+\begin{itemize}
+    \item[$\square$] بخش ۱ (مقدمه) را خواندم
+    \item[$\square$] بخش ۲ (سه دسته) را خواندم
+    \item[$\square$] بخش ۳ (Creational) را خواندم
+    \item[$\square$] بخش ۴ (Structural) را خواندم
+    \item[$\square$] بخش ۵ (Behavioral) را خواندم
+    \item[$\square$] بخش ۶ (Repository) را خواندم
+    \item[$\square$] بخش ۷ (سؤالات) را خواندم
+    \item[$\square$] بخش ۸ (تمرین‌ها) را خواندم
+\end{itemize}
+
+\subsection{بعد از مطالعه}
+\begin{itemize}
+    \item[$\square$] سؤالات سطح ۱ را جواب دادم
+    \item[$\square$] سؤالات سطح ۲ را جواب دادم
+    \item[$\square$] سؤالات سطح ۳ را جواب دادم
+    \item[$\square$] تمرین ۱ را انجام دادم
+    \item[$\square$] تمرین ۲ را انجام دادم
+    \item[$\square$] تمرین ۳ را انجام دادم
+    \item[$\square$] تمرین ۴ را انجام دادم
+    \item[$\square$] تمرین ۵ را انجام دادم
+\end{itemize}
+
+% ============================================================
+\section{جمع‌بندی}
+
+\subsection{سه نکتهٔ کلیدی}
+\begin{enumerate}
+    \item \textbf{Design Pattern = راه‌حل آماده}
+    \begin{itemize}
+        \item Creational, Structural, Behavioral
+        \item الگو = قالب، نه کد
+    \end{itemize}
+    \item \textbf{الگو را با نیاز انتخاب کن}
+    \begin{itemize}
+        \item مشکل را بشناس
+        \item ساده‌ترین راه‌حل
+        \item از روی مد نباشد
+    \end{itemize}
+    \item \textbf{Design Pattern + SOLID}
+    \begin{itemize}
+        \item هر دو برای کد قابل نگهداری
+        \item مکمل هم
+    \end{itemize}
+\end{enumerate}
+
+\subsection{سؤال نهایی}
+\begin{quote}
+\textbf{اگر امروز کد Sprint 2 خود را ببینید، کدام قسمت را می‌شود با 
+Strategy یا Observer ساده‌تر کرد؟}
+\end{quote}
+
+\vspace{1cm}
+
+\begin{center}
+\textbf{\Large پایان جزوه}\\[0.5cm]
+\textbf{\Large موفق باشید!}
+\end{center}
+
+\end{document}
